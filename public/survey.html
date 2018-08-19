@@ -44,7 +44,7 @@
                 <p>Your mind is always buzzing with unexplored ideas and plans.</p>
             </label>
             <select class="form-control" id="questionOne" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -61,7 +61,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionTwo" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -78,7 +78,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionThree" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -95,7 +95,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionFour" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -112,7 +112,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionFive" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -129,7 +129,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionSix" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -146,7 +146,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionSeven" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -163,7 +163,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionEight" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -176,12 +176,12 @@
         <div class="form-group">
             <label for="questionNine">
                 <h3>Question 9</h3>
-                <p>You think that everyone’s views should be respected regardless of whether they are supported by facts or
-                    not.
+                <p>You think that everyone’s views should be respected regardless of whether they are supported by facts
+                    or not.
                 </p>
             </label>
             <select class="form-control" id="questionNine" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -198,7 +198,7 @@
                 </p>
             </label>
             <select class="form-control" id="questionTen" style="width: 180px;">
-                <option>Select An Option</option>
+                <option value="">Select An Option</option>
                 <option value="1">1 (Strongly Disagree)</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -256,6 +256,7 @@
     $("#submit").on("click", function (event) {
         event.preventDefault();
         console.log("im clicking")
+        let isValid = true;
 
         // Create an object for the user"s data
         let userData = {
@@ -263,7 +264,7 @@
             photo: $("#photo").val(),
             scores: [
                 $("#questionOne").val(),
-                $("#questioneTwo").val(),
+                $("#questionTwo").val(),
                 $("#questionThree").val(),
                 $("#questionFour").val(),
                 $("#questionFive").val(),
@@ -274,16 +275,27 @@
                 $("#questionTen").val()
             ]
         };
+
+        if (userData.name === "" ||
+            userData.photo === "" ||
+            userData.scores.filter(function (a) { return a === "" }).length > 0) {
+            isValid = false;
+        }
+
+        if (!isValid) {
+            alert("Please fill out all of the survey fields!");
+            return;
+        }
         console.log("here is user data name from click" + userData.name);
 
         // AJAX post the data to the friends API.
         $.post("/api/friends", userData, function (data) {
-            if (data) {
-                $("#matchName").text(data.name);
-                $("#matchPic").attr("src", data.photo);
-                $("#results-modal").modal("toggle");
 
-            }
+            $("#matchName").text(data.name);
+            $("#matchPic").attr("src", data.photo);
+            $("#results-modal").modal("toggle");
+
+
         });
 
     });
